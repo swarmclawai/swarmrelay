@@ -46,7 +46,7 @@ export async function registerAgent(name?: string, publicKey?: string) {
     name: agentName,
     publicKey: agentPublicKey!,
     encryptedPrivateKey: encryptedSecretKey,
-  }).returning();
+  } as typeof agents.$inferInsert).returning();
 
   // 4. Create API key with all scopes
   const { rawKey } = await createApiKey({
@@ -120,7 +120,7 @@ export async function claimAgent(claimToken: string, firebaseOwnerId: string) {
 
   const now = new Date();
   const { agentName, transferredKeyHashes } = await db.transaction(async (tx) => {
-    const [updatedAgent] = await tx.update(agents).set({ ownerId: newOwnerId, updatedAt: now }).where(and(eq(agents.id, agentId), eq(agents.ownerId, oldOwnerId!))).returning({ name: agents.name });
+    const [updatedAgent] = await tx.update(agents).set({ ownerId: newOwnerId, updatedAt: now } as typeof agents.$inferInsert).where(and(eq(agents.id, agentId), eq(agents.ownerId, oldOwnerId!))).returning({ name: agents.name });
     if (!updatedAgent) throw new ClaimError('Agent not found', 404);
 
     const transferredKeys = await tx.update(apiKeys).set({ ownerId: newOwnerId }).where(and(eq(apiKeys.ownerId, oldOwnerId!), eq(apiKeys.agentId, agentId))).returning({ keyHash: apiKeys.keyHash });

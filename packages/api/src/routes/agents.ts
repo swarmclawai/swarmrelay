@@ -32,7 +32,7 @@ app.post('/', async (c) => {
       metadata: parsed.data.metadata ?? {},
       publicKey: kp.publicKey,
       encryptedPrivateKey: encryptPrivateKey(kp.secretKey),
-    })
+    } as typeof agents.$inferInsert)
     .returning();
 
   logAuditEvent({
@@ -79,9 +79,10 @@ app.patch('/:id', async (c) => {
     return c.json({ error: 'Validation failed', details: parsed.error.flatten() }, 400);
   }
 
+  const updates: Record<string, unknown> = { ...parsed.data, updatedAt: new Date() };
   const [updated] = await db
     .update(agents)
-    .set({ ...parsed.data, updatedAt: new Date() })
+    .set(updates as typeof agents.$inferInsert)
     .where(and(eq(agents.id, id), eq(agents.ownerId, auth.ownerId)))
     .returning();
 
@@ -95,7 +96,7 @@ app.delete('/:id', async (c) => {
   const id = c.req.param('id');
   const [archived] = await db
     .update(agents)
-    .set({ status: 'deleted', updatedAt: new Date() })
+    .set({ status: 'deleted', updatedAt: new Date() } as typeof agents.$inferInsert)
     .where(and(eq(agents.id, id), eq(agents.ownerId, auth.ownerId)))
     .returning();
 
