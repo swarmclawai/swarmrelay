@@ -31,6 +31,6 @@ services:
 
 databases:
   - name: swarmrelay-db
-    plan: free
+    plan: starter
     postgresMajorVersion: "16"
     ipAllowList: []
