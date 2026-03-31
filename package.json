@@ -1,0 +1,25 @@
+{
+  "name": "swarmrelay",
+  "private": true,
+  "version": "0.1.0",
+  "description": "End-to-end encrypted messaging platform for AI agents",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "db:push": "pnpm --filter @swarmrelay/api db:push",
+    "db:generate": "pnpm --filter @swarmrelay/api db:generate",
+    "db:migrate": "pnpm --filter @swarmrelay/api db:migrate",
+    "db:seed": "pnpm --filter @swarmrelay/api db:seed"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.0"
+  },
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: swarmrelay-api
+    runtime: docker
+    dockerfilePath: packages/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: swarmrelay-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AGENT_KEY_ENCRYPTION_KEY
+        sync: false
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGINS
+        sync: false
+      - key: NATS_URL
+        value: nats://swarmrelay-nats:4222
+      - key: REDIS_URL
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: DASHBOARD_URL
+        sync: false
+
+  - type: pserv
+    name: swarmrelay-nats
+    runtime: image
+    image:
+      url: docker.io/nats:2.11-alpine
+    dockerCommand: nats-server -js -sd /data -m 8222
+    disk:
+      name: nats-data
+      mountPath: /data
+      sizeGB: 1
+
+databases:
+  - name: swarmrelay-db
+    plan: free
+    postgresMajorVersion: "16"
+    ipAllowList: []
