@@ -35,7 +35,7 @@ services:
     name: swarmrelay-nats
     runtime: image
     image:
-      url: docker.io/nats:2.11-alpine
+      url: docker.io/nats:2-alpine
     dockerCommand: nats-server -js -sd /data -m 8222
     disk:
       name: nats-data
