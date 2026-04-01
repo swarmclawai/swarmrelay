@@ -49,33 +49,35 @@ export default function ApiKeysPage() {
   return (
     <AuthGuard>
       <DashboardShell>
-        <div className="p-6 max-w-3xl">
-          <h1 className="text-2xl font-bold mb-6">API Keys</h1>
+        <div className="p-6 max-w-3xl font-mono">
+          <h1 className="text-2xl font-bold mb-6 text-[#E0E0E0]">
+            <span className="text-[#00FF88] mr-2">&gt;</span>API Keys
+          </h1>
           {loading ? (
-            <div className="text-zinc-500 text-sm">Loading...</div>
+            <div className="text-[#555] text-sm">Loading...</div>
           ) : keys.length === 0 ? (
-            <div className="text-zinc-500 text-sm">No API keys. Create agents to generate API keys, or use the CLI to register.</div>
+            <div className="text-[#555] text-sm">No API keys. Create agents to generate API keys, or use the CLI to register.</div>
           ) : (
             <div className="space-y-3">
               {keys.map((key) => (
-                <div key={key.id} className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                <div key={key.id} className="p-4 bg-[#111] border border-[#333]">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-sm">{key.name}</div>
-                      <div className="text-xs text-zinc-500 font-mono mt-1">{key.keyPrefix}...</div>
+                      <div className="font-medium text-sm text-[#E0E0E0]">{key.name}</div>
+                      <div className="text-xs text-[#555] font-mono mt-1">{key.keyPrefix}...</div>
                     </div>
                     {!key.revokedAt && (
                       <button
                         onClick={() => handleRevoke(key.id)}
-                        className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                        className="text-xs text-[#FF4444] hover:text-[#FF4444]/80 transition-colors font-mono"
                       >
-                        Revoke
+                        [revoke]
                       </button>
                     )}
                   </div>
-                  <div className="flex gap-4 mt-2 text-xs text-zinc-500">
+                  <div className="flex gap-4 mt-2 text-xs text-[#888]">
                     <span>Scopes: {key.scopes.join(', ')}</span>
-                    {key.revokedAt && <span className="text-red-400">Revoked</span>}
+                    {key.revokedAt && <span className="text-[#FF4444]">REVOKED</span>}
                     {key.lastUsedAt && <span>Last used: {new Date(key.lastUsedAt).toLocaleDateString()}</span>}
                   </div>
                 </div>

@@ -36,46 +36,48 @@ export default function AgentDetailPage() {
   return (
     <AuthGuard>
       <DashboardShell>
-        <div className="p-6 max-w-2xl">
+        <div className="p-6 max-w-2xl font-mono">
           {loading ? (
-            <div className="text-zinc-500">Loading...</div>
+            <div className="text-[#555]">Loading...</div>
           ) : !agent ? (
-            <div className="text-zinc-500">Agent not found</div>
+            <div className="text-[#555]">Agent not found</div>
           ) : (
             <>
-              <h1 className="text-2xl font-bold mb-6">{agent.name}</h1>
-              <div className="space-y-4">
-                <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                  <div className="text-xs text-zinc-500 mb-1">Status</div>
-                  <div className="text-sm">{agent.status}</div>
+              <h1 className="text-2xl font-bold mb-6 text-[#E0E0E0]">
+                <span className="text-[#00FF88] mr-2">&gt;</span>{agent.name}
+              </h1>
+              <div className="space-y-3">
+                <div className="p-4 bg-[#111] border border-[#333]">
+                  <div className="text-xs text-[#555] mb-1">// Status</div>
+                  <div className="text-sm text-[#E0E0E0]">{agent.status}</div>
                 </div>
-                <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                  <div className="text-xs text-zinc-500 mb-1">Public Key</div>
-                  <div className="text-sm font-mono break-all">{agent.publicKey}</div>
+                <div className="p-4 bg-[#111] border border-[#333]">
+                  <div className="text-xs text-[#555] mb-1">// Public Key</div>
+                  <div className="text-sm font-mono break-all text-[#00FF88]">{agent.publicKey}</div>
                 </div>
-                <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                  <div className="text-xs text-zinc-500 mb-1">Agent ID</div>
-                  <div className="text-sm font-mono">{agent.id}</div>
+                <div className="p-4 bg-[#111] border border-[#333]">
+                  <div className="text-xs text-[#555] mb-1">// Agent ID</div>
+                  <div className="text-sm font-mono text-[#888]">{agent.id}</div>
                 </div>
                 {agent.description && (
-                  <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                    <div className="text-xs text-zinc-500 mb-1">Description</div>
-                    <div className="text-sm">{agent.description}</div>
+                  <div className="p-4 bg-[#111] border border-[#333]">
+                    <div className="text-xs text-[#555] mb-1">// Description</div>
+                    <div className="text-sm text-[#E0E0E0]">{agent.description}</div>
                   </div>
                 )}
                 {agent.webhookUrl && (
-                  <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                    <div className="text-xs text-zinc-500 mb-1">Webhook URL</div>
-                    <div className="text-sm font-mono">{agent.webhookUrl}</div>
+                  <div className="p-4 bg-[#111] border border-[#333]">
+                    <div className="text-xs text-[#555] mb-1">// Webhook URL</div>
+                    <div className="text-sm font-mono text-[#888]">{agent.webhookUrl}</div>
                   </div>
                 )}
-                <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                  <div className="text-xs text-zinc-500 mb-1">Last Seen</div>
-                  <div className="text-sm">{agent.lastSeenAt ? new Date(agent.lastSeenAt).toLocaleString() : 'Never'}</div>
+                <div className="p-4 bg-[#111] border border-[#333]">
+                  <div className="text-xs text-[#555] mb-1">// Last Seen</div>
+                  <div className="text-sm text-[#E0E0E0]">{agent.lastSeenAt ? new Date(agent.lastSeenAt).toLocaleString() : 'Never'}</div>
                 </div>
-                <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-                  <div className="text-xs text-zinc-500 mb-1">Created</div>
-                  <div className="text-sm">{new Date(agent.createdAt).toLocaleString()}</div>
+                <div className="p-4 bg-[#111] border border-[#333]">
+                  <div className="text-xs text-[#555] mb-1">// Created</div>
+                  <div className="text-sm text-[#E0E0E0]">{new Date(agent.createdAt).toLocaleString()}</div>
                 </div>
               </div>
             </>

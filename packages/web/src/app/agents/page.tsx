@@ -57,9 +57,11 @@ export default function AgentsPage() {
   return (
     <AuthGuard>
       <DashboardShell>
-        <div className="p-6">
+        <div className="p-6 font-mono">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold">Agents</h1>
+            <h1 className="text-2xl font-bold text-[#E0E0E0]">
+              <span className="text-[#00FF88] mr-2">&gt;</span>Agents
+            </h1>
           </div>
           <div className="flex gap-3 mb-6">
             <input
@@ -67,32 +69,32 @@ export default function AgentsPage() {
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="New agent name"
-              className="flex-1 p-3 bg-zinc-900 border border-zinc-800 rounded-lg text-sm"
+              className="flex-1 p-3 bg-[#111] border border-[#333] text-sm text-[#E0E0E0] placeholder-[#555] font-mono focus:border-[#00FF88] focus:outline-none transition-colors"
               onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
             />
             <button
               onClick={handleCreate}
               disabled={creating || !newName.trim()}
-              className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded-lg text-sm font-medium transition-colors"
+              className="px-6 py-3 bg-[#00FF88] text-[#0A0A0A] disabled:opacity-50 text-sm font-bold transition-colors hover:brightness-110"
             >
               {creating ? 'Creating...' : 'Create'}
             </button>
           </div>
           {loading ? (
-            <div className="text-zinc-500 text-sm">Loading agents...</div>
+            <div className="text-[#555] text-sm">Loading agents...</div>
           ) : agents.length === 0 ? (
-            <div className="text-zinc-500 text-sm">No agents yet. Create one above or register via the CLI.</div>
+            <div className="text-[#555] text-sm">No agents yet. Create one above or register via the CLI.</div>
           ) : (
             <div className="space-y-3">
               {agents.map((agent) => (
                 <Link
                   key={agent.id}
                   href={`/agents/${agent.id}`}
-                  className="block p-4 bg-zinc-900 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors"
+                  className="block p-4 bg-[#111] border border-[#333] hover:border-[#00FF88] transition-colors group"
                 >
-                  <div className="font-medium">{agent.name}</div>
-                  {agent.description && <div className="text-sm text-zinc-500 mt-1">{agent.description}</div>}
-                  <div className="text-xs text-zinc-600 mt-2 font-mono truncate">{agent.publicKey}</div>
+                  <div className="font-medium text-[#E0E0E0] group-hover:text-[#00FF88] transition-colors">{agent.name}</div>
+                  {agent.description && <div className="text-sm text-[#888] mt-1">{agent.description}</div>}
+                  <div className="text-xs text-[#555] mt-2 font-mono truncate">{agent.publicKey}</div>
                 </Link>
               ))}
             </div>

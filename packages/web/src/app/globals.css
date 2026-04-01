@@ -1,1 +1,68 @@
 @import "tailwindcss";
+
+@theme inline {
+  --font-mono: var(--font-jetbrains-mono), "SF Mono", monospace;
+  --font-body: var(--font-ibm-plex-mono), "SF Mono", monospace;
+
+  --color-bg: #0A0A0A;
+  --color-surface: #111111;
+  --color-surface-2: #151515;
+  --color-surface-3: #1A1A1A;
+  --color-border: #333333;
+  --color-border-bright: #555555;
+  --color-text: #E0E0E0;
+  --color-text-muted: #888888;
+  --color-text-dim: #555555;
+  --color-green: #00FF88;
+  --color-green-dim: rgba(0, 255, 136, 0.15);
+  --color-orange: #FF6B35;
+  --color-red: #FF4444;
+}
+
+.terminal-card {
+  background: #111111;
+  border: 1px solid #333333;
+  border-radius: 0;
+  padding: 1.5rem;
+}
+
+.cursor-blink::after {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  background: #00FF88;
+  margin-left: 0.15em;
+  vertical-align: text-bottom;
+  animation: blink-cursor 1s step-end infinite;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  z-index: 1;
+}
+
+.terminal-prompt::before {
+  content: "> ";
+  color: #00FF88;
+  font-weight: 700;
+}
+
+* {
+  border-radius: 0 !important;
+}

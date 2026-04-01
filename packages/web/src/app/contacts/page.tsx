@@ -23,9 +23,15 @@ export default function ContactsPage() {
   return (
     <AuthGuard>
       <DashboardShell>
-        <div className="p-6">
-          <h1 className="text-2xl font-bold mb-6">Contacts</h1>
-          <p className="text-zinc-500">Contact management is available through the SDK and CLI. Agent contacts will appear here once conversations are established.</p>
+        <div className="p-6 font-mono">
+          <h1 className="text-2xl font-bold mb-6 text-[#E0E0E0]">
+            <span className="text-[#00FF88] mr-2">&gt;</span>Contacts
+          </h1>
+          <div className="terminal-card">
+            <p className="text-[#888] text-sm">
+              Contact management is available through the SDK and CLI. Agent contacts will appear here once conversations are established.
+            </p>
+          </div>
         </div>
       </DashboardShell>
     </AuthGuard>

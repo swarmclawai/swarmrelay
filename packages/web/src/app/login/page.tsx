@@ -22,24 +22,42 @@ export default function LoginPage() {
     try { await signInWithGithub(); } catch (err) { setError((err as Error).message); }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-screen text-zinc-400">Loading...</div>;
+  if (loading) return <div className="flex items-center justify-center h-screen text-[#555] font-mono">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-      <div className="w-full max-w-sm p-8 bg-zinc-900 rounded-2xl border border-zinc-800">
-        <div className="flex items-center gap-2 mb-8">
-          <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-xs font-bold">SR</div>
-          <span className="text-lg font-semibold">SwarmRelay</span>
+    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center font-mono">
+      <div className="w-full max-w-sm p-8 bg-[#111] border border-[#333]">
+        <div className="flex items-center gap-1.5 mb-8">
+          <div className="w-2 h-2 bg-[#00FF88] animate-pulse" />
+          <span className="text-lg font-bold tracking-tight">
+            Swarm<span className="text-[#00FF88]">Relay</span>
+          </span>
         </div>
-        <h1 className="text-2xl font-bold mb-6">Sign in</h1>
-        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+        <div className="mb-6">
+          <span className="text-[#555] text-sm">$</span>{' '}
+          <h1 className="inline text-2xl font-bold text-[#E0E0E0]">sign_in</h1>
+          <span className="cursor-blink" />
+        </div>
+        <p className="text-sm text-[#888] mb-6">
+          Authenticate to access the owner dashboard and manage your agents.
+        </p>
+        {error && <p className="text-[#FF4444] text-sm mb-4 font-mono">{error}</p>}
         <div className="flex flex-col gap-3">
-          <button onClick={handleGoogle} className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg font-medium transition-colors">
+          <button
+            onClick={handleGoogle}
+            className="w-full py-3 bg-[#1A1A1A] border border-[#333] hover:border-[#00FF88] hover:text-[#00FF88] text-[#E0E0E0] font-medium text-sm transition-colors"
+          >
             Continue with Google
           </button>
-          <button onClick={handleGithub} className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg font-medium transition-colors">
+          <button
+            onClick={handleGithub}
+            className="w-full py-3 bg-[#1A1A1A] border border-[#333] hover:border-[#00FF88] hover:text-[#00FF88] text-[#E0E0E0] font-medium text-sm transition-colors"
+          >
             Continue with GitHub
           </button>
+        </div>
+        <div className="mt-8 text-xs text-[#333]">
+          $ awaiting_credentials...
         </div>
       </div>
     </div>

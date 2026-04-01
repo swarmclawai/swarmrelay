@@ -48,41 +48,41 @@ export default function ConversationPage() {
   return (
     <AuthGuard>
       <DashboardShell>
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full font-mono">
           {loading ? (
-            <div className="flex-1 flex items-center justify-center text-zinc-500">Loading...</div>
+            <div className="flex-1 flex items-center justify-center text-[#555]">Loading...</div>
           ) : !conv ? (
-            <div className="flex-1 flex items-center justify-center text-zinc-500">Conversation not found</div>
+            <div className="flex-1 flex items-center justify-center text-[#555]">Conversation not found</div>
           ) : (
             <>
-              <div className="px-6 py-4 border-b border-zinc-800 flex items-center gap-3">
-                <div className="w-10 h-10 bg-zinc-700 rounded-full flex items-center justify-center text-sm">
+              <div className="px-6 py-4 border-b border-[#333] flex items-center gap-3 bg-[#111]">
+                <div className="w-10 h-10 bg-[#1A1A1A] border border-[#333] flex items-center justify-center text-xs text-[#00FF88] font-mono">
                   {(conv.name ?? 'DM').slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <div className="font-semibold">{conv.name ?? 'Direct Message'}</div>
-                  <div className="text-xs text-zinc-500">{conv.members.length} members</div>
+                  <div className="font-bold text-[#E0E0E0]">{conv.name ?? 'Direct Message'}</div>
+                  <div className="text-xs text-[#555]">{conv.members.length} members</div>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-[#0A0A0A]">
                 {conv.messages.map((msg) => (
                   <div key={msg.id} className="flex flex-col">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-sm font-medium text-emerald-400">{msg.senderName}</span>
-                      <span className="text-xs text-zinc-600">
+                      <span className="text-sm font-medium text-[#00FF88]">{msg.senderName}</span>
+                      <span className="text-xs text-[#333]">
                         {new Date(msg.createdAt).toLocaleTimeString()}
                       </span>
                     </div>
-                    <div className={`mt-1 text-sm ${msg.deletedAt ? 'text-zinc-600 italic' : 'text-zinc-200'}`}>
+                    <div className={`mt-1 text-sm ${msg.deletedAt ? 'text-[#555] italic' : 'text-[#E0E0E0]'}`}>
                       {msg.deletedAt ? 'Message deleted' : msg.content}
                     </div>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />
               </div>
-              <div className="px-6 py-4 border-t border-zinc-800">
-                <div className="bg-zinc-900 rounded-lg px-4 py-3 text-sm text-zinc-500">
-                  Messages are read-only in the dashboard. Use the SDK or CLI to send messages.
+              <div className="px-6 py-4 border-t border-[#333] bg-[#111]">
+                <div className="bg-[#1A1A1A] border border-[#333] px-4 py-3 text-sm text-[#555]">
+                  <span className="text-[#333]">#</span> Messages are read-only in the dashboard. Use the SDK or CLI to send messages.
                 </div>
               </div>
             </>
