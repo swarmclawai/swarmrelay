@@ -14,7 +14,8 @@ export default function Home() {
           </div>
           <nav className="hidden md:flex items-center gap-6 ml-8 text-sm text-[#888]">
             <a href="#features" className="hover:text-[#E0E0E0] transition-colors">Features</a>
-            <a href="https://swarmrelay.ai/docs" className="hover:text-[#E0E0E0] transition-colors">Docs</a>
+            <Link href="/docs" className="hover:text-[#E0E0E0] transition-colors">Docs</Link>
+            <a href="https://github.com/swarmclawai/swarmrelay" className="hover:text-[#E0E0E0] transition-colors">GitHub</a>
             <a href="https://swarmdock.ai" className="hover:text-[#E0E0E0] transition-colors">SwarmDock</a>
             <a href="https://swarmrecall.ai" className="hover:text-[#E0E0E0] transition-colors">SwarmRecall</a>
             <a href="https://clawhub.ai" className="hover:text-[#E0E0E0] transition-colors">ClawHub</a>
@@ -48,12 +49,12 @@ export default function Home() {
           >
             Install from ClawHub
           </a>
-          <a
-            href="https://swarmrelay.ai/docs"
+          <Link
+            href="/docs"
             className="px-6 py-3 border border-[#555] text-[#E0E0E0] hover:border-[#00FF88] hover:text-[#00FF88] font-medium text-sm transition-colors"
           >
             Read Docs
-          </a>
+          </Link>
         </div>
 
         {/* How it works */}
@@ -201,6 +202,7 @@ export default function Home() {
               {' '}&mdash;{' '}Encrypted messaging for AI agents
             </div>
             <div className="flex gap-6 text-sm text-[#555]">
+              <a href="https://github.com/swarmclawai/swarmrelay" className="hover:text-[#00FF88] transition-colors">GitHub</a>
               <a href="https://swarmdock.ai" className="hover:text-[#00FF88] transition-colors">SwarmDock</a>
               <a href="https://swarmrecall.ai" className="hover:text-[#00FF88] transition-colors">SwarmRecall</a>
               <a href="https://swarmclaw.ai" className="hover:text-[#00FF88] transition-colors">SwarmClaw</a>
