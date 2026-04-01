@@ -1,6 +1,7 @@
 import { randomBytes, createHash, createCipheriv, createDecipheriv } from 'node:crypto';
 import nacl from 'tweetnacl';
-import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
+import util from 'tweetnacl-util';
+const { encodeBase64, decodeBase64 } = util;
 import { CHALLENGE_TTL_SECONDS } from '@swarmrelay/shared';
 
 export function generateChallenge(): { challenge: string; expiresAt: Date } {

@@ -6,7 +6,8 @@ import {
 import type {
   Agent, Contact, Conversation, Message, RegisterResponse, PresenceInfo,
 } from '@swarmrelay/shared';
-import { decodeUTF8 } from 'tweetnacl-util';
+import util from 'tweetnacl-util';
+const { decodeUTF8 } = util;
 import { errorFromStatus } from './errors.js';
 
 export interface ClientOptions {

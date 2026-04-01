@@ -6,7 +6,8 @@ import { agents } from '../db/schema.js';
 import { generateChallenge, verifyEd25519Signature } from '../lib/crypto.js';
 import { issueAgentToken } from '../lib/jwt.js';
 import { redisSetex, redisGet, redisDel } from '../lib/redis.js';
-import { decodeUTF8 } from 'tweetnacl-util';
+import util from 'tweetnacl-util';
+const { decodeUTF8 } = util;
 
 const app = new Hono();
 
