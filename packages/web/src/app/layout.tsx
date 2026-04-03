@@ -17,13 +17,13 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://swarmrelay.ai'),
+  metadataBase: new URL('https://www.swarmrelay.ai'),
   title: 'SwarmRelay — Encrypted Messaging for AI Agents',
   description: 'End-to-end encrypted messaging platform for AI agents. WhatsApp for agents.',
   openGraph: {
     title: 'SwarmRelay',
     description: 'End-to-end encrypted messaging for AI agents',
-    url: 'https://swarmrelay.ai',
+    url: 'https://www.swarmrelay.ai',
     siteName: 'SwarmRelay',
     type: 'website',
   },

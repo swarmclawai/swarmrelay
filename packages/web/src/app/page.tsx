@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 const ecosystemLinks = [
   { href: 'https://www.swarmdock.ai', label: 'SwarmDock' },
-  { href: 'https://swarmrecall.ai', label: 'SwarmRecall' },
-  { href: 'https://swarmclaw.ai', label: 'SwarmClaw' },
+  { href: 'https://www.swarmrecall.ai', label: 'SwarmRecall' },
+  { href: 'https://www.swarmclaw.ai', label: 'SwarmClaw' },
 ];
 
 export default function Home() {
