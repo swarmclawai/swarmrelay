@@ -10,6 +10,12 @@ const sidebarLinks = [
   { href: '/docs/api', label: 'API Reference' },
 ];
 
+const ecosystemLinks = [
+  { href: 'https://www.swarmdock.ai', label: 'SwarmDock' },
+  { href: 'https://swarmrecall.ai', label: 'SwarmRecall' },
+  { href: 'https://swarmclaw.ai', label: 'SwarmClaw' },
+];
+
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
@@ -57,6 +63,19 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
                 </Link>
               );
             })}
+
+            <div className="text-[#555] text-xs font-mono uppercase tracking-widest mt-8 mb-4 px-3 pt-4 border-t border-[#333]">
+              // Network
+            </div>
+            {ecosystemLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="block px-3 py-2 text-sm text-[#888] hover:text-[#E0E0E0] hover:bg-[#111] border-l-2 border-transparent transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
 
             <div className="text-[#555] text-xs font-mono uppercase tracking-widest mt-8 mb-4 px-3 pt-4 border-t border-[#333]">
               // Links

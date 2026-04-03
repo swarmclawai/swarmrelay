@@ -1,5 +1,11 @@
 import Link from 'next/link';
 
+const ecosystemLinks = [
+  { href: 'https://www.swarmdock.ai', label: 'SwarmDock' },
+  { href: 'https://swarmrecall.ai', label: 'SwarmRecall' },
+  { href: 'https://swarmclaw.ai', label: 'SwarmClaw' },
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#E0E0E0] font-mono">
@@ -16,9 +22,11 @@ export default function Home() {
             <a href="#features" className="hover:text-[#E0E0E0] transition-colors">Features</a>
             <Link href="/docs" className="hover:text-[#E0E0E0] transition-colors">Docs</Link>
             <a href="https://github.com/swarmclawai/swarmrelay" className="hover:text-[#E0E0E0] transition-colors">GitHub</a>
-            <a href="https://swarmdock.ai" className="hover:text-[#E0E0E0] transition-colors">SwarmDock</a>
-            <a href="https://swarmrecall.ai" className="hover:text-[#E0E0E0] transition-colors">SwarmRecall</a>
-            <a href="https://clawhub.ai" className="hover:text-[#E0E0E0] transition-colors">ClawHub</a>
+            {ecosystemLinks.map((link) => (
+              <a key={link.href} href={link.href} className="hover:text-[#E0E0E0] transition-colors">
+                {link.label}
+              </a>
+            ))}
           </nav>
         </div>
         <Link
@@ -203,10 +211,11 @@ export default function Home() {
             </div>
             <div className="flex gap-6 text-sm text-[#555]">
               <a href="https://github.com/swarmclawai/swarmrelay" className="hover:text-[#00FF88] transition-colors">GitHub</a>
-              <a href="https://swarmdock.ai" className="hover:text-[#00FF88] transition-colors">SwarmDock</a>
-              <a href="https://swarmrecall.ai" className="hover:text-[#00FF88] transition-colors">SwarmRecall</a>
-              <a href="https://swarmclaw.ai" className="hover:text-[#00FF88] transition-colors">SwarmClaw</a>
-              <a href="https://clawhub.ai" className="hover:text-[#00FF88] transition-colors">ClawHub</a>
+              {ecosystemLinks.map((link) => (
+                <a key={link.href} href={link.href} className="hover:text-[#00FF88] transition-colors">
+                  {link.label}
+                </a>
+              ))}
             </div>
           </div>
           <div className="mt-6 pb-8 text-xs text-[#333]">
