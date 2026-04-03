@@ -18,6 +18,7 @@ import dashboardRouter from './routes/dashboard.js';
 import statsRouter from './routes/stats.js';
 import presenceRouter from './routes/presence.js';
 import typingRouter from './routes/typing.js';
+import a2aRouter from './routes/a2a.js';
 import { apiKeyAuth, firebaseAuth, requireScope } from './middleware/auth.js';
 import { rateLimit } from './middleware/rateLimit.js';
 import { connectRedis } from './lib/redis.js';
@@ -65,6 +66,9 @@ export function createApp() {
   // Presence and typing (agent auth)
   app.route('/api/v1/presence', (() => { const r = new Hono(); r.use('*', apiKeyAuth); r.use('*', rateLimit()); r.route('/', presenceRouter); return r; })());
   app.route('/api/v1/typing', (() => { const r = new Hono(); r.use('*', apiKeyAuth); r.use('*', rateLimit()); r.route('/', typingRouter); return r; })());
+
+  // A2A Protocol bridge (no auth — uses Ed25519 signature verification internally)
+  app.route('/a2a', (() => { const r = new Hono(); r.use('*', rateLimit()); r.route('/', a2aRouter); return r; })());
 
   // WebSocket endpoint (auth via query param token)
   app.get('/ws', upgradeWebSocket((c) => {

@@ -177,6 +177,49 @@ export const contacts = pgTable(
   ],
 );
 
+// --- A2A Protocol ---
+
+export const a2aTasks = pgTable(
+  'a2a_tasks',
+  {
+    id: text('id').primaryKey(),
+    correlationId: text('correlation_id').notNull().unique(),
+    conversationId: uuid('conversation_id').notNull().references(() => conversations.id, { onDelete: 'cascade' }),
+    fromAgent: text('from_agent').notNull(),
+    toAgent: text('to_agent').notNull(),
+    status: text('status').notNull().default('submitted'),
+    result: jsonb('result'),
+    errorMessage: text('error_message'),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('a2a_tasks_correlation_idx').on(t.correlationId),
+    index('a2a_tasks_conversation_idx').on(t.conversationId),
+    index('a2a_tasks_from_agent_idx').on(t.fromAgent),
+    index('a2a_tasks_status_idx').on(t.status),
+  ],
+);
+
+export const a2aAgents = pgTable(
+  'a2a_agents',
+  {
+    id: text('id').primaryKey(),
+    publicKey: text('public_key').notNull(),
+    agentCard: jsonb('agent_card').notNull(),
+    apiEndpoint: text('api_endpoint').notNull(),
+    isTrusted: boolean('is_trusted').notNull().default(false),
+    discoveredAt: timestamp('discovered_at', { withTimezone: true }).notNull().defaultNow(),
+    lastSeen: timestamp('last_seen', { withTimezone: true }).notNull().defaultNow(),
+    metadata: jsonb('metadata'),
+  },
+  (t) => [
+    index('a2a_agents_public_key_idx').on(t.publicKey),
+    index('a2a_agents_endpoint_idx').on(t.apiEndpoint),
+  ],
+);
+
 // --- Audit ---
 
 export const auditLog = pgTable(

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import {
   CONVERSATION_TYPES, MEMBER_ROLES, MESSAGE_TYPES, PRESENCE_STATUSES,
-  API_KEY_SCOPES, RECEIPT_STATUSES,
+  API_KEY_SCOPES, RECEIPT_STATUSES, A2A_TASK_STATUSES,
 } from './constants.js';
 
 // --- Pagination ---
@@ -146,6 +146,40 @@ export const AddMembersSchema = z.object({
   members: z.array(z.string().uuid()).min(1),
 });
 
+// --- A2A Protocol ---
+
+export const A2AJsonRpcSchema = z.object({
+  jsonrpc: z.literal('2.0').default('2.0'),
+  id: z.union([z.string(), z.number()]).optional(),
+  method: z.enum(['sendMessage', 'getStatus', 'cancelTask', 'getResult', 'discoverAgent']),
+  params: z.record(z.unknown()),
+});
+
+export const A2ASendMessageParamsSchema = z.object({
+  fromAgent: z.string().min(1),
+  toAgent: z.string().min(1),
+  message: z.unknown(),
+  taskId: z.string().optional(),
+  correlationId: z.string().optional(),
+  metadata: z.record(z.unknown()).optional(),
+});
+
+export const A2AGetStatusParamsSchema = z.object({
+  taskId: z.string().optional(),
+  correlationId: z.string().optional(),
+}).refine((d) => d.taskId || d.correlationId, { message: 'Either taskId or correlationId is required' });
+
+export const A2ACancelTaskParamsSchema = z.object({
+  taskId: z.string().min(1),
+  reason: z.string().optional(),
+});
+
+export const A2ADiscoverAgentParamsSchema = z.object({
+  agentId: z.string().optional(),
+  agentUrl: z.string().url().optional(),
+  publicKey: z.string().optional(),
+}).refine((d) => d.agentId || d.agentUrl || d.publicKey, { message: 'At least one identifier required' });
+
 // --- Inferred Types ---
 
 export type Register = z.infer<typeof RegisterSchema>;
@@ -166,3 +200,8 @@ export type PresenceUpdate = z.infer<typeof PresenceUpdateSchema>;
 export type Typing = z.infer<typeof TypingSchema>;
 export type DirectorySearch = z.infer<typeof DirectorySearchSchema>;
 export type AddMembers = z.infer<typeof AddMembersSchema>;
+export type A2AJsonRpc = z.infer<typeof A2AJsonRpcSchema>;
+export type A2ASendMessageParams = z.infer<typeof A2ASendMessageParamsSchema>;
+export type A2AGetStatusParams = z.infer<typeof A2AGetStatusParamsSchema>;
+export type A2ACancelTaskParams = z.infer<typeof A2ACancelTaskParamsSchema>;
+export type A2ADiscoverAgentParams = z.infer<typeof A2ADiscoverAgentParamsSchema>;

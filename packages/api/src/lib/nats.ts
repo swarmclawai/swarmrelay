@@ -31,6 +31,7 @@ const STREAM_SUBJECTS = [
   'swarmrelay.presence.>',
   'swarmrelay.typing.>',
   'swarmrelay.system.>',
+  'swarmrelay.a2a.>',
 ];
 
 export function isNatsConfigured(): boolean {
@@ -181,6 +182,7 @@ function subscribeBasic(
     nc.subscribe('swarmrelay.presence.*'),
     nc.subscribe('swarmrelay.typing.*'),
     nc.subscribe('swarmrelay.system.*'),
+    nc.subscribe('swarmrelay.a2a.*.*'),
   ];
 
   let closed = false;

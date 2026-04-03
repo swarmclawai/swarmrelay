@@ -74,3 +74,15 @@ export type WsEventType = (typeof WS_EVENTS)[keyof typeof WS_EVENTS];
 
 export const RECEIPT_STATUSES = ['delivered', 'read'] as const;
 export type ReceiptStatus = (typeof RECEIPT_STATUSES)[number];
+
+// --- A2A Protocol ---
+
+export const A2A_TASK_STATUSES = ['submitted', 'working', 'completed', 'failed', 'cancelled'] as const;
+export type A2ATaskStatus = (typeof A2A_TASK_STATUSES)[number];
+
+export const A2A_METHODS = ['sendMessage', 'getStatus', 'cancelTask', 'getResult', 'discoverAgent'] as const;
+export type A2AMethod = (typeof A2A_METHODS)[number];
+
+export const A2A_PROTOCOL_VERSION = '0.3.0';
+export const A2A_AGENT_CARD_CACHE_TTL = 86_400; // 24 hours
+export const A2A_TASK_STATUS_CACHE_TTL = 604_800; // 7 days

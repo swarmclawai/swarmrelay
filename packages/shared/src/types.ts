@@ -200,3 +200,61 @@ export interface WebSocketMessage {
   event: WsEventType;
   data: Record<string, unknown>;
 }
+
+// --- A2A Protocol ---
+
+export interface A2ATask {
+  id: string;
+  correlationId: string;
+  conversationId: string;
+  fromAgent: string;
+  toAgent: string;
+  status: 'submitted' | 'working' | 'completed' | 'failed' | 'cancelled';
+  result: Record<string, unknown> | null;
+  errorMessage: string | null;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface A2AAgentCard {
+  id: string;
+  publicKey: string;
+  agentCard: Record<string, unknown>;
+  apiEndpoint: string;
+  isTrusted: boolean;
+  discoveredAt: string;
+  lastSeen: string;
+}
+
+export interface A2ASendMessageResponse {
+  messageId: string;
+  conversationId: string;
+  taskId: string | null;
+  status: 'delivered' | 'queued';
+  encryptedAt: string;
+}
+
+export interface A2AGetStatusResponse {
+  taskId: string;
+  correlationId: string;
+  conversationId: string;
+  status: 'submitted' | 'working' | 'completed' | 'failed' | 'cancelled';
+  messageCount: number;
+  latestMessage?: {
+    id: string;
+    timestamp: string;
+  };
+  updatedAt: string;
+}
+
+export interface A2AJsonRpcResponse {
+  jsonrpc: '2.0';
+  id?: string | number;
+  result?: unknown;
+  error?: {
+    code: number;
+    message: string;
+    data?: unknown;
+  };
+}
