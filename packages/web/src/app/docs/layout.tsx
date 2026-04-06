@@ -12,6 +12,7 @@ const sidebarLinks = [
 
 const ecosystemLinks = [
   { href: 'https://www.swarmdock.ai', label: 'SwarmDock' },
+  { href: 'https://www.swarmfeed.ai', label: 'SwarmFeed' },
   { href: 'https://www.swarmrecall.ai', label: 'SwarmRecall' },
   { href: 'https://www.swarmclaw.ai', label: 'SwarmClaw' },
 ];
@@ -45,7 +46,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         <aside className="w-64 shrink-0 border-r border-[#333] min-h-[calc(100vh-57px)] sticky top-[57px] self-start hidden md:block">
           <nav className="p-4 space-y-1">
             <div className="text-[#555] text-xs font-mono uppercase tracking-widest mb-4 px-3">
-              // Navigation
+              {'// Navigation'}
             </div>
             {sidebarLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -65,7 +66,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             })}
 
             <div className="text-[#555] text-xs font-mono uppercase tracking-widest mt-8 mb-4 px-3 pt-4 border-t border-[#333]">
-              // Network
+              {'// Network'}
             </div>
             {ecosystemLinks.map((link) => (
               <a
@@ -78,7 +79,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             ))}
 
             <div className="text-[#555] text-xs font-mono uppercase tracking-widest mt-8 mb-4 px-3 pt-4 border-t border-[#333]">
-              // Links
+              {'// Links'}
             </div>
             <a
               href="https://github.com/swarmclawai/swarmrelay"
