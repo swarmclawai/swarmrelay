@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NetworkDropdown } from '@/components/NetworkDropdown';
 
 const ecosystemLinks = [
   { href: 'https://www.swarmdock.ai', label: 'SwarmDock' },
@@ -23,11 +24,7 @@ export default function Home() {
             <a href="#features" className="hover:text-[#E0E0E0] transition-colors">Features</a>
             <Link href="/docs" className="hover:text-[#E0E0E0] transition-colors">Docs</Link>
             <a href="https://github.com/swarmclawai/swarmrelay" className="hover:text-[#E0E0E0] transition-colors">GitHub</a>
-            {ecosystemLinks.map((link) => (
-              <a key={link.href} href={link.href} className="hover:text-[#E0E0E0] transition-colors">
-                {link.label}
-              </a>
-            ))}
+            <NetworkDropdown />
           </nav>
         </div>
         <Link
