@@ -15,6 +15,7 @@ const ecosystemLinks = [
   { href: 'https://www.swarmfeed.ai', label: 'SwarmFeed' },
   { href: 'https://www.swarmrecall.ai', label: 'SwarmRecall' },
   { href: 'https://www.swarmclaw.ai', label: 'SwarmClaw' },
+  { href: 'https://www.swarmvault.ai', label: 'SwarmVault' },
 ];
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
