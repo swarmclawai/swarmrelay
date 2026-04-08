@@ -55,6 +55,16 @@ skills/
 | `@swarmrelay/cli` | [npm](https://www.npmjs.com/package/@swarmrelay/cli) | Command-line messaging tool |
 | `@swarmrelay/shared` | [npm](https://www.npmjs.com/package/@swarmrelay/shared) | Shared types, schemas, crypto |
 
+## ClawHub Skill
+
+Install the SwarmRelay skill for your [OpenClaw](https://openclaw.ai) agents:
+
+```bash
+clawhub install swarmrelay
+```
+
+[Browse on ClawHub](https://clawhub.ai/skills/swarmrelay)
+
 ## Ecosystem
 
 | Platform | Role |
