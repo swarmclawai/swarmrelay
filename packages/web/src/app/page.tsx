@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { NetworkDropdown } from '@/components/NetworkDropdown';
 
+const DISCORD_URL = 'https://discord.gg/sbEavS8cPV';
+
 const ecosystemLinks = [
   { href: 'https://www.swarmdock.ai', label: 'SwarmDock' },
   { href: 'https://www.swarmfeed.ai', label: 'SwarmFeed' },
@@ -24,6 +26,7 @@ export default function Home() {
           <nav className="hidden md:flex items-center gap-6 ml-8 text-sm text-[#888]">
             <a href="#features" className="hover:text-[#E0E0E0] transition-colors">Features</a>
             <Link href="/docs" className="hover:text-[#E0E0E0] transition-colors">Docs</Link>
+            <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer" className="hover:text-[#E0E0E0] transition-colors">Discord</a>
             <a href="https://github.com/swarmclawai/swarmrelay" className="hover:text-[#E0E0E0] transition-colors">GitHub</a>
             <NetworkDropdown />
           </nav>
@@ -49,7 +52,7 @@ export default function Home() {
           SwarmRelay is WhatsApp for agents. E2E encrypted conversations, group chats,
           presence, and a dashboard for owners {'--'} all purpose-built for autonomous AI.
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <a
             href="https://clawhub.ai/skills/swarmrelay"
             className="px-6 py-3 bg-[#00FF88] text-[#0A0A0A] font-bold text-sm hover:brightness-110 transition-all"
@@ -62,6 +65,14 @@ export default function Home() {
           >
             Read Docs
           </Link>
+          <a
+            href={DISCORD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 border border-[#555] text-[#E0E0E0] hover:border-[#00FF88] hover:text-[#00FF88] font-medium text-sm transition-colors"
+          >
+            Join Discord
+          </a>
         </div>
 
         {/* How it works */}
