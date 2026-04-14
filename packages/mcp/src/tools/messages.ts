@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { errorContent, safeCall, type Client } from './shared.js';
+import { errorContent, safeCall, type Backend } from './shared.js';
 
-export function registerMessageTools(server: McpServer, client: Client): void {
+export function registerMessageTools(server: McpServer, backend: Backend): void {
   server.registerTool(
     'messages_list',
     {
@@ -15,7 +15,7 @@ export function registerMessageTools(server: McpServer, client: Client): void {
       },
     },
     async ({ conversationId, limit, offset }) =>
-      safeCall(() => client.messages.list(conversationId, { limit, offset })),
+      safeCall(() => backend.messages.list(conversationId, { limit, offset })),
   );
 
   server.registerTool(
@@ -34,7 +34,7 @@ export function registerMessageTools(server: McpServer, client: Client): void {
         metadata: z.record(z.unknown()).optional(),
       },
     },
-    async (args) => safeCall(() => client.messages.send(args)),
+    async (args) => safeCall(() => backend.messages.send(args)),
   );
 
   server.registerTool(
@@ -42,7 +42,7 @@ export function registerMessageTools(server: McpServer, client: Client): void {
     {
       title: 'Send encrypted DM',
       description:
-        'Encrypt a plaintext message with NaCl box and send it to a DM conversation. Requires the local agent private key to be configured.',
+        'Encrypt a plaintext message with NaCl box and send it to a DM conversation. The backend handles NaCl box encryption using the agent keypair.',
       inputSchema: {
         conversationId: z.string().describe('DM conversation ID.'),
         recipientPublicKey: z.string().describe("Recipient agent's Ed25519 public key (base64)."),
@@ -51,13 +51,18 @@ export function registerMessageTools(server: McpServer, client: Client): void {
       },
     },
     async ({ conversationId, recipientPublicKey, plaintext, type }) => {
-      if (!client.getPrivateKey()) {
+      // Client-side backends (SwarmRelayClient) advertise their local private
+      // key via getPrivateKey(). If present, we expect the backend to perform
+      // the encryption with that key. If absent, the backend may still be a
+      // server-side implementation that encrypts internally — we let it try
+      // and surface the underlying error.
+      if (backend.getPrivateKey && !backend.getPrivateKey()) {
         return errorContent(
           'Encrypted DM requires a local private key. Start the server with SWARMRELAY_PRIVATE_KEY or allow auto-registration so credentials include a keypair.',
         );
       }
       return safeCall(() =>
-        client.messages.sendEncrypted({ conversationId, recipientPublicKey, plaintext, type }),
+        backend.messages.sendEncrypted({ conversationId, recipientPublicKey, plaintext, type }),
       );
     },
   );
@@ -75,7 +80,7 @@ export function registerMessageTools(server: McpServer, client: Client): void {
       },
     },
     async ({ messageId, ciphertext, nonce, signature }) =>
-      safeCall(() => client.messages.edit(messageId, { ciphertext, nonce, signature })),
+      safeCall(() => backend.messages.edit(messageId, { ciphertext, nonce, signature })),
   );
 
   server.registerTool(
@@ -85,7 +90,7 @@ export function registerMessageTools(server: McpServer, client: Client): void {
       description: 'Soft-delete a message the current agent authored.',
       inputSchema: { messageId: z.string() },
     },
-    async ({ messageId }) => safeCall(() => client.messages.delete(messageId)),
+    async ({ messageId }) => safeCall(() => backend.messages.delete(messageId)),
   );
 
   server.registerTool(
@@ -99,6 +104,6 @@ export function registerMessageTools(server: McpServer, client: Client): void {
       },
     },
     async ({ messageId, status }) =>
-      safeCall(() => client.messages.sendReceipt(messageId, status)),
+      safeCall(() => backend.messages.sendReceipt(messageId, status)),
   );
 }

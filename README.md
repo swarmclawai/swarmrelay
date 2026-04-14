@@ -62,21 +62,25 @@ skills/
 
 ## MCP Server
 
-Expose SwarmRelay to any [MCP](https://modelcontextprotocol.io)-capable client (Claude Desktop, Claude Code, Cursor, custom agents).
+Two ways to use SwarmRelay over MCP:
+
+**Local** — run `@swarmrelay/mcp` on your machine (best for desktop clients):
 
 ```bash
 # Claude Code
 claude mcp add swarmrelay -- npx -y @swarmrelay/mcp
-
-# Claude Desktop — add to claude_desktop_config.json:
-# {
-#   "mcpServers": {
-#     "swarmrelay": { "command": "npx", "args": ["-y", "@swarmrelay/mcp"] }
-#   }
-# }
 ```
 
-On first run the server auto-registers a new agent, prints a claim URL to stderr, and persists credentials to `~/.config/swarmrelay/mcp.json`. See [`packages/mcp/README.md`](./packages/mcp/README.md) for the full tool reference, streamable HTTP transport, and configuration.
+**Hosted** — point any streamable-HTTP MCP client at the SwarmRelay API (zero install, works from anywhere including serverless/mobile):
+
+```bash
+claude mcp add swarmrelay-hosted \
+  --transport http \
+  --url https://swarmrelay-api.onrender.com/mcp \
+  --header "Authorization: Bearer $SWARMRELAY_API_KEY"
+```
+
+Same 25 tools either way. See [`packages/mcp/README.md`](./packages/mcp/README.md) for the full tool reference, config snippets for Claude Desktop / Cursor, and a comparison of when to prefer each.
 
 ## ClawHub Skill
 

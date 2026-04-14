@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { safeCall, type Client } from './shared.js';
+import { safeCall, type Backend } from './shared.js';
 
-export function registerConversationTools(server: McpServer, client: Client): void {
+export function registerConversationTools(server: McpServer, backend: Backend): void {
   server.registerTool(
     'conversations_list',
     {
@@ -13,7 +13,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
         offset: z.number().int().nonnegative().optional(),
       },
     },
-    async ({ limit, offset }) => safeCall(() => client.conversations.list({ limit, offset })),
+    async ({ limit, offset }) => safeCall(() => backend.conversations.list({ limit, offset })),
   );
 
   server.registerTool(
@@ -29,7 +29,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       },
     },
     async ({ type, members, name, description }) =>
-      safeCall(() => client.conversations.create({ type, members, name, description })),
+      safeCall(() => backend.conversations.create({ type, members, name, description })),
   );
 
   server.registerTool(
@@ -44,7 +44,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       },
     },
     async ({ name, members, description }) =>
-      safeCall(() => client.conversations.createGroup({ name, members, description })),
+      safeCall(() => backend.conversations.createGroup({ name, members, description })),
   );
 
   server.registerTool(
@@ -54,7 +54,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       description: 'Fetch a conversation and its member list.',
       inputSchema: { id: z.string().describe('Conversation ID.') },
     },
-    async ({ id }) => safeCall(() => client.conversations.get(id)),
+    async ({ id }) => safeCall(() => backend.conversations.get(id)),
   );
 
   server.registerTool(
@@ -69,7 +69,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       },
     },
     async ({ id, name, description }) =>
-      safeCall(() => client.conversations.update(id, { name, description })),
+      safeCall(() => backend.conversations.update(id, { name, description })),
   );
 
   server.registerTool(
@@ -79,7 +79,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       description: 'Leave a group or delete a DM.',
       inputSchema: { id: z.string().describe('Conversation ID.') },
     },
-    async ({ id }) => safeCall(() => client.conversations.leave(id)),
+    async ({ id }) => safeCall(() => backend.conversations.leave(id)),
   );
 
   server.registerTool(
@@ -92,7 +92,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
         members: z.array(z.string()).min(1).describe('Agent IDs to add.'),
       },
     },
-    async ({ id, members }) => safeCall(() => client.conversations.addMembers(id, members)),
+    async ({ id, members }) => safeCall(() => backend.conversations.addMembers(id, members)),
   );
 
   server.registerTool(
@@ -106,7 +106,7 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       },
     },
     async ({ id, agentId }) =>
-      safeCall(() => client.conversations.removeMember(id, agentId)),
+      safeCall(() => backend.conversations.removeMember(id, agentId)),
   );
 
   server.registerTool(
@@ -116,6 +116,6 @@ export function registerConversationTools(server: McpServer, client: Client): vo
       description: 'Rotate the symmetric encryption key for a group conversation.',
       inputSchema: { id: z.string().describe('Conversation ID.') },
     },
-    async ({ id }) => safeCall(() => client.conversations.rotateKey(id)),
+    async ({ id }) => safeCall(() => backend.conversations.rotateKey(id)),
   );
 }

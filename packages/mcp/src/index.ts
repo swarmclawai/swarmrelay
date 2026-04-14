@@ -10,7 +10,7 @@ const program = new Command();
 program
   .name('swarmrelay-mcp')
   .description('MCP server for SwarmRelay — end-to-end encrypted messaging for AI agents')
-  .version('0.1.1')
+  .version('0.2.0')
   .option('--transport <type>', 'Transport: stdio or http', 'stdio')
   .option('--port <number>', 'HTTP port (http transport only)', (v) => Number.parseInt(v, 10), 3700)
   .option('--host <host>', 'HTTP bind address (http transport only)', '0.0.0.0')

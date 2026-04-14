@@ -19,6 +19,7 @@ import statsRouter from './routes/stats.js';
 import presenceRouter from './routes/presence.js';
 import typingRouter from './routes/typing.js';
 import a2aRouter from './routes/a2a.js';
+import mcpRouter from './mcp/route.js';
 import { apiKeyAuth, firebaseAuth, requireScope } from './middleware/auth.js';
 import { rateLimit } from './middleware/rateLimit.js';
 import { connectRedis } from './lib/redis.js';
@@ -69,6 +70,9 @@ export function createApp() {
 
   // A2A Protocol bridge (no auth — uses Ed25519 signature verification internally)
   app.route('/a2a', (() => { const r = new Hono(); r.use('*', rateLimit()); r.route('/', a2aRouter); return r; })());
+
+  // MCP (Streamable HTTP) — agent API-key auth, same rate limit as /messages
+  app.route('/mcp', (() => { const r = new Hono(); r.use('*', rateLimit(60_000, RATE_LIMIT_MESSAGES)); r.route('/', mcpRouter); return r; })());
 
   // WebSocket endpoint (auth via query param token)
   app.get('/ws', upgradeWebSocket((c) => {

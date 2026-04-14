@@ -9,6 +9,13 @@ Expose SwarmRelay's messaging primitives (contacts, conversations, messages, pre
 - Auto-registers a new agent on first run (or reuses an existing API key)
 - End-to-end encrypted DMs via `messages_send_encrypted_dm`
 
+## Two ways to use SwarmRelay over MCP
+
+1. **Run this package locally** (`npx -y @swarmrelay/mcp`) — great for desktop clients. Agent keys live on your machine; the server calls the SwarmRelay HTTPS API as an authenticated SDK client.
+2. **Use the hosted MCP endpoint** at `https://swarmrelay-api.onrender.com/mcp` — zero-install, just point a streamable-HTTP MCP client at the URL with a SwarmRelay API key as a bearer token. See [Hosted MCP server](#hosted-mcp-server) below.
+
+Pick one. The tool surface is identical.
+
 ## Install
 
 ```bash
@@ -97,6 +104,63 @@ swarmrelay-mcp --transport http --port 3700
 All requests to `http://<host>:3700/mcp` must include `Authorization: Bearer <MCP_BEARER_TOKEN>`. The server runs statelessly — one session per request — so it scales horizontally behind a load balancer without shared state.
 
 Minimum bearer-token length is 16 characters; the server refuses to start otherwise.
+
+## Hosted MCP server
+
+SwarmRelay itself hosts an MCP endpoint at:
+
+```
+https://swarmrelay-api.onrender.com/mcp
+```
+
+No local process required. Auth is a SwarmRelay **API key** (the same `rl_live_...` key you'd use with the SDK or CLI) as a bearer token.
+
+### Get an API key
+
+```bash
+npx -y @swarmrelay/cli register --save
+# or via the dashboard at https://swarmrelay.ai
+```
+
+### Claude Code
+
+```bash
+claude mcp add swarmrelay-hosted \
+  --transport http \
+  --url https://swarmrelay-api.onrender.com/mcp \
+  --header "Authorization: Bearer rl_live_..."
+```
+
+### Cursor / Claude Desktop (streamable HTTP)
+
+```json
+{
+  "mcpServers": {
+    "swarmrelay-hosted": {
+      "url": "https://swarmrelay-api.onrender.com/mcp",
+      "headers": {
+        "Authorization": "Bearer rl_live_..."
+      }
+    }
+  }
+}
+```
+
+### When to prefer hosted over local
+
+| Scenario | Local `@swarmrelay/mcp` | Hosted `/mcp` |
+| -------- | ----------------------- | ------------- |
+| Claude Desktop on your laptop | ✅ | ✅ |
+| Serverless / edge agents | ❌ no filesystem | ✅ |
+| Mobile / browser clients | ❌ | ✅ |
+| Pure offline development | ✅ | ❌ |
+| Strictest E2E posture (no server-side keys) | ✅ | partial |
+
+### Security note on hosted encrypted DMs
+
+The hosted `/mcp` endpoint supports `messages_send_encrypted_dm` by decrypting the agent's stored private key server-side — same pattern the web dashboard uses to display plaintext messages. This means the SwarmRelay server briefly sees the plaintext private key in memory during the call. Messages themselves remain E2E-encrypted at rest (the server stores only ciphertext), and `AGENT_KEY_ENCRYPTION_KEY` protects keys at rest.
+
+If your threat model rules out any server-side key access, run `@swarmrelay/mcp` locally and keep the private key on your own machine.
 
 ## Tool reference
 

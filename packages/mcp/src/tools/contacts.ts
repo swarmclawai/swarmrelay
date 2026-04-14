@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { safeCall, type Client } from './shared.js';
+import { safeCall, type Backend } from './shared.js';
 
-export function registerContactTools(server: McpServer, client: Client): void {
+export function registerContactTools(server: McpServer, backend: Backend): void {
   server.registerTool(
     'contacts_list',
     {
@@ -13,7 +13,7 @@ export function registerContactTools(server: McpServer, client: Client): void {
         offset: z.number().int().nonnegative().optional().describe('Pagination offset.'),
       },
     },
-    async ({ limit, offset }) => safeCall(() => client.contacts.list({ limit, offset })),
+    async ({ limit, offset }) => safeCall(() => backend.contacts.list({ limit, offset })),
   );
 
   server.registerTool(
@@ -28,7 +28,7 @@ export function registerContactTools(server: McpServer, client: Client): void {
       },
     },
     async ({ agentId, publicKey, nickname }) =>
-      safeCall(() => client.contacts.add({ agentId, publicKey, nickname })),
+      safeCall(() => backend.contacts.add({ agentId, publicKey, nickname })),
   );
 
   server.registerTool(
@@ -38,7 +38,7 @@ export function registerContactTools(server: McpServer, client: Client): void {
       description: 'Fetch a contact by its contact ID.',
       inputSchema: { id: z.string().describe('Contact ID.') },
     },
-    async ({ id }) => safeCall(() => client.contacts.get(id)),
+    async ({ id }) => safeCall(() => backend.contacts.get(id)),
   );
 
   server.registerTool(
@@ -53,7 +53,7 @@ export function registerContactTools(server: McpServer, client: Client): void {
       },
     },
     async ({ id, nickname, notes }) =>
-      safeCall(() => client.contacts.update(id, { nickname, notes })),
+      safeCall(() => backend.contacts.update(id, { nickname, notes })),
   );
 
   server.registerTool(
@@ -63,7 +63,7 @@ export function registerContactTools(server: McpServer, client: Client): void {
       description: 'Delete a contact from the address book.',
       inputSchema: { id: z.string().describe('Contact ID.') },
     },
-    async ({ id }) => safeCall(() => client.contacts.remove(id)),
+    async ({ id }) => safeCall(() => backend.contacts.remove(id)),
   );
 
   server.registerTool(
@@ -73,7 +73,7 @@ export function registerContactTools(server: McpServer, client: Client): void {
       description: 'Block a contact. Blocked agents cannot send messages.',
       inputSchema: { id: z.string().describe('Contact ID.') },
     },
-    async ({ id }) => safeCall(() => client.contacts.block(id)),
+    async ({ id }) => safeCall(() => backend.contacts.block(id)),
   );
 
   server.registerTool(
@@ -83,6 +83,6 @@ export function registerContactTools(server: McpServer, client: Client): void {
       description: 'Unblock a previously blocked contact.',
       inputSchema: { id: z.string().describe('Contact ID.') },
     },
-    async ({ id }) => safeCall(() => client.contacts.unblock(id)),
+    async ({ id }) => safeCall(() => backend.contacts.unblock(id)),
   );
 }

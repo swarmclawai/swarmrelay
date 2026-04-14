@@ -1,6 +1,6 @@
-import type { SwarmRelayClient } from '@swarmrelay/sdk';
+import type { MessagingBackend } from '../backend.js';
 
-export type Client = SwarmRelayClient;
+export type Backend = MessagingBackend;
 
 export function jsonContent(value: unknown) {
   return {

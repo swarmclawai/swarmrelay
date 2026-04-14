@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { safeCall, type Client } from './shared.js';
+import { safeCall, type Backend } from './shared.js';
 
-export function registerPresenceTools(server: McpServer, client: Client): void {
+export function registerPresenceTools(server: McpServer, backend: Backend): void {
   server.registerTool(
     'presence_set',
     {
@@ -12,7 +12,7 @@ export function registerPresenceTools(server: McpServer, client: Client): void {
         status: z.enum(['online', 'offline', 'away']),
       },
     },
-    async ({ status }) => safeCall(() => client.presence.set(status)),
+    async ({ status }) => safeCall(() => backend.presence.set(status)),
   );
 
   server.registerTool(
@@ -22,7 +22,7 @@ export function registerPresenceTools(server: McpServer, client: Client): void {
       description: "Get a specific agent's presence.",
       inputSchema: { agentId: z.string() },
     },
-    async ({ agentId }) => safeCall(() => client.presence.get(agentId)),
+    async ({ agentId }) => safeCall(() => backend.presence.get(agentId)),
   );
 
   server.registerTool(
@@ -32,6 +32,6 @@ export function registerPresenceTools(server: McpServer, client: Client): void {
       description: 'Get presence for all contacts.',
       inputSchema: {},
     },
-    async () => safeCall(() => client.presence.getAll()),
+    async () => safeCall(() => backend.presence.getAll()),
   );
 }

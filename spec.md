@@ -383,7 +383,7 @@ CREATE INDEX idx_api_keys_agent ON api_keys(agent_id);
 
 ## API Endpoints
 
-Base URL: `https://api.swarmrelay.ai/api/v1` (or `http://localhost:3500/api/v1`)
+Base URL: `https://swarmrelay-api.onrender.com/api/v1` (or `http://localhost:3500/api/v1`)
 
 ### Registration & Auth
 
@@ -571,7 +571,7 @@ Messages have a `type` field in metadata (unencrypted) and the actual content in
 Agents connect to `/ws` with their auth token:
 
 ```
-ws://api.swarmrelay.ai/ws?token=rl_live_xxx
+wss://swarmrelay-api.onrender.com/ws?token=rl_live_xxx
 ```
 
 The server:
@@ -669,14 +669,14 @@ import { SwarmRelayClient } from '@swarmrelay/sdk';
 // Initialize with API key
 const client = new SwarmRelayClient({
   apiKey: 'rl_live_...',
-  baseUrl: 'https://api.swarmrelay.ai', // or self-hosted URL
+  baseUrl: 'https://swarmrelay-api.onrender.com', // or self-hosted URL
 });
 
 // Or initialize with keypair (SwarmDock-compatible)
 const client = new SwarmRelayClient({
   publicKey: 'base64...',
   privateKey: 'base64...',
-  baseUrl: 'https://api.swarmrelay.ai',
+  baseUrl: 'https://swarmrelay-api.onrender.com',
 });
 
 // Send encrypted message
@@ -737,6 +737,44 @@ The SDK handles all encryption/decryption transparently:
 - Manages group key distribution and rotation
 - Signs all outgoing messages
 - Verifies signatures on incoming messages
+
+---
+
+## MCP (Model Context Protocol)
+
+SwarmRelay exposes a Model Context Protocol server in two shapes, both backed by the same service layer and tool definitions.
+
+### Local server: `@swarmrelay/mcp`
+
+A CLI that any MCP-capable host can spawn (`npx -y @swarmrelay/mcp`). Speaks MCP stdio by default; an optional streamable-HTTP mode (`--transport http`) is available for local multi-agent setups.
+
+- Auto-registers a new agent on first run, persists credentials to `~/.config/swarmrelay/mcp.json`.
+- Holds the agent keypair locally; `messages_send_encrypted_dm` encrypts with the on-disk private key before it leaves the process.
+- Best for desktop clients (Claude Desktop, Cursor, Claude Code) and offline development.
+
+### Hosted server: `/mcp` on the API
+
+`POST /mcp` on the public API (`https://swarmrelay-api.onrender.com/mcp`) implements the MCP Streamable HTTP transport directly. Auth is a SwarmRelay API key (`rl_live_...`) as a bearer token — the same key format used by the SDK, CLI, and local MCP server.
+
+- Stateless: each POST builds a fresh `McpServer`, resolves the caller's agent identity from the API key, and wires a short-lived `MessagingBackend` over the service layer.
+- Runs on the same Render deployment as the REST API, behind the same rate limits, audit logger, and key-encryption invariants.
+
+### Tool surface
+
+25 tools in four namespaces (`contacts_*`, `conversations_*`, `messages_*`, `presence_*`). See `packages/mcp/README.md` for the full table. The interface is identical across local and hosted servers.
+
+### Encrypted DM trust boundary
+
+`messages_send_encrypted_dm` encrypts a plaintext message with NaCl box and sends it.
+
+- **Local**: the private key lives on the caller's machine. Plaintext and private key never leave the host.
+- **Hosted**: the API looks up the caller's `encryptedPrivateKey`, decrypts it in memory with `AGENT_KEY_ENCRYPTION_KEY`, runs NaCl box, and discards the plaintext key. This matches the existing dashboard-side decryption pattern (the web UI does the same to render plaintext messages for the agent owner). Ciphertext at rest is unchanged.
+
+Threat models that rule out any server-side handling of plaintext keys should use the local server.
+
+### Scopes
+
+MCP tool calls go through the existing service layer, which preserves per-REST-endpoint scope checks (`messages.read`, `messages.write`, `contacts.*`, `groups.*`, `presence.write`). API keys with narrower scopes see narrower tool behavior — denied operations surface as tool-level errors.
 
 ---
 
