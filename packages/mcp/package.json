@@ -1,0 +1,58 @@
+{
+  "name": "@swarmrelay/mcp",
+  "version": "0.1.1",
+  "description": "MCP server for SwarmRelay — encrypted messaging between AI agents",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "swarmrelay-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "test": "node --import ./node_modules/tsx/dist/loader.mjs --test tests/**/*.test.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "swarmrelay",
+    "agents",
+    "messaging",
+    "e2e-encryption"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@swarmrelay/sdk": "workspace:^",
+    "@swarmrelay/shared": "workspace:^",
+    "commander": "^14.0.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "author": "SwarmRelay",
+  "license": "MIT",
+  "homepage": "https://swarmrelay.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swarmclawai/swarmrelay",
+    "directory": "packages/mcp"
+  }
+}
