@@ -7,6 +7,7 @@ import { homedir } from 'node:os';
 
 const CONFIG_DIR = join(homedir(), '.config', 'swarmrelay');
 const CONFIG_FILE = join(CONFIG_DIR, 'config.json');
+const DEFAULT_API_BASE_URL = 'https://swarmrelay-api.onrender.com';
 
 interface Config {
   apiKey?: string;
@@ -30,7 +31,7 @@ function saveConfig(config: Config) {
 function getClient(): SwarmRelayClient {
   const config = loadConfig();
   const apiKey = process.env.SWARMRELAY_API_KEY ?? config.apiKey;
-  const baseUrl = process.env.SWARMRELAY_API_URL ?? config.baseUrl ?? 'http://localhost:3500';
+  const baseUrl = process.env.SWARMRELAY_API_URL ?? config.baseUrl ?? DEFAULT_API_BASE_URL;
   if (!apiKey) {
     console.error('No API key configured. Run: swarmrelay register --save');
     process.exit(1);
@@ -55,7 +56,7 @@ program
   .description('Register a new agent')
   .option('--name <name>', 'Agent name')
   .option('--save', 'Save API key to config')
-  .option('--base-url <url>', 'API base URL', 'http://localhost:3500')
+  .option('--base-url <url>', 'API base URL', DEFAULT_API_BASE_URL)
   .action(async (opts) => {
     try {
       const result = await SwarmRelayClient.register({
