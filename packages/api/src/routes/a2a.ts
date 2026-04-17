@@ -3,7 +3,7 @@ import { eq, and, or, desc, isNull, count, sql } from 'drizzle-orm';
 import {
   A2AJsonRpcSchema, A2ASendMessageParamsSchema, A2AGetStatusParamsSchema,
   A2ACancelTaskParamsSchema, A2ADiscoverAgentParamsSchema,
-  A2A_PROTOCOL_VERSION, A2A_TASK_STATUS_CACHE_TTL,
+  A2A_PROTOCOL_VERSION, A2A_TASK_STATUS_CACHE_TTL, WS_EVENTS,
 } from '@swarmrelay/shared';
 import type { A2ATaskStatus } from '@swarmrelay/shared';
 import { db } from '../db/client.js';
@@ -17,8 +17,9 @@ import {
 import { decryptPrivateKey } from '../lib/crypto.js';
 import { encryptDM, signMessage } from '@swarmrelay/shared';
 import { publishNatsEvent } from '../lib/nats.js';
-import { redisGet, redisSetex, redisPublish } from '../lib/redis.js';
+import { redisDel, redisGet, redisSetex } from '../lib/redis.js';
 import { logAuditEvent } from '../services/audit.js';
+import { publishConversationEvent } from '../lib/realtime.js';
 
 const MUTATING_METHODS = new Set(['sendMessage', 'cancelTask']);
 
@@ -178,7 +179,7 @@ async function handleSendMessage(params: Record<string, unknown>) {
   }).onConflictDoNothing();
 
   // Publish to NATS
-  publishNatsEvent('swarmrelay.a2a.message_new', {
+  await publishNatsEvent('swarmrelay.a2a.message_new', {
     type: 'a2a.message.new',
     data: {
       messageId: storedMessage.id,
@@ -195,16 +196,14 @@ async function handleSendMessage(params: Record<string, unknown>) {
   });
 
   // Publish to Redis for WebSocket delivery
-  redisPublish(`msg:${conversation.id}`, JSON.stringify({
-    event: 'message.new',
-    data: {
-      id: storedMessage.id,
-      conversationId: conversation.id,
-      senderId: fromCred.id,
-      type: messageType,
-      createdAt: storedMessage.createdAt,
-    },
-  }));
+  await publishConversationEvent(conversation.id, WS_EVENTS.MESSAGE_NEW, {
+    id: storedMessage.id,
+    conversationId: conversation.id,
+    senderId: fromCred.id,
+    type: messageType,
+    createdAt: storedMessage.createdAt,
+    metadata: storedMessage.metadata as Record<string, unknown> ?? {},
+  });
 
   // Audit
   logAuditEvent({
@@ -323,8 +322,13 @@ async function handleCancelTask(params: Record<string, unknown>) {
     updatedAt: new Date(),
   }).where(eq(a2aTasks.id, taskId));
 
+  await Promise.all([
+    redisDel(`a2a:task_status:${task.id}`),
+    redisDel(`a2a:task_status:${task.correlationId}`),
+  ]);
+
   // Publish cancellation event
-  publishNatsEvent('swarmrelay.a2a.task_cancelled', {
+  await publishNatsEvent('swarmrelay.a2a.task_cancelled', {
     type: 'a2a.task.cancelled',
     data: { taskId, reason: reason ?? null },
     timestamp: new Date().toISOString(),
