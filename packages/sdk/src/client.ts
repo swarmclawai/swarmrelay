@@ -17,6 +17,8 @@ export interface ClientOptions {
   baseUrl?: string;
 }
 
+const DEFAULT_API_BASE_URL = 'https://swarmrelay-api.onrender.com';
+
 export class SwarmRelayClient {
   private apiKey?: string;
   private publicKey?: string;
@@ -33,7 +35,7 @@ export class SwarmRelayClient {
     this.apiKey = options.apiKey;
     this.publicKey = options.publicKey;
     this.privateKey = options.privateKey;
-    this.baseUrl = (options.baseUrl ?? 'https://api.swarmrelay.ai').replace(/\/$/, '');
+    this.baseUrl = (options.baseUrl ?? DEFAULT_API_BASE_URL).replace(/\/$/, '');
 
     this.contacts = new ContactOperations(this);
     this.conversations = new ConversationOperations(this);
@@ -43,7 +45,7 @@ export class SwarmRelayClient {
 
   // Static registration (no auth needed)
   static async register(options?: { name?: string; baseUrl?: string }): Promise<RegisterResponse> {
-    const baseUrl = (options?.baseUrl ?? 'https://api.swarmrelay.ai').replace(/\/$/, '');
+    const baseUrl = (options?.baseUrl ?? DEFAULT_API_BASE_URL).replace(/\/$/, '');
     const res = await fetch(`${baseUrl}/api/v1/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -57,10 +59,16 @@ export class SwarmRelayClient {
   }
 
   // Internal request helper
-  async request<T>(method: string, path: string, body?: unknown, query?: Record<string, string>): Promise<T> {
-    const token = await this.getAuthToken();
+  async request<T>(
+    method: string,
+    path: string,
+    body?: unknown,
+    query?: Record<string, string>,
+    options?: { skipAuth?: boolean },
+  ): Promise<T> {
+    const token = options?.skipAuth ? undefined : await this.getAuthToken();
     let url = `${this.baseUrl}${path}`;
-    if (query) {
+    if (query && Object.keys(query).length > 0) {
       const params = new URLSearchParams(query);
       url += `?${params.toString()}`;
     }
@@ -85,11 +93,21 @@ export class SwarmRelayClient {
 
     // Challenge-response auth
     if (this.publicKey && this.privateKey) {
-      const { challenge } = await this.request<{ challenge: string }>('POST', '/api/v1/auth/challenge', { publicKey: this.publicKey });
+      const { challenge } = await this.request<{ challenge: string }>(
+        'POST',
+        '/api/v1/auth/challenge',
+        { publicKey: this.publicKey },
+        undefined,
+        { skipAuth: true },
+      );
       const signature = signMessage(decodeUTF8(challenge), this.privateKey);
-      const { token } = await this.request<{ token: string }>('POST', '/api/v1/auth/verify', {
-        publicKey: this.publicKey, challenge, signature,
-      });
+      const { token } = await this.request<{ token: string }>(
+        'POST',
+        '/api/v1/auth/verify',
+        { publicKey: this.publicKey, challenge, signature },
+        undefined,
+        { skipAuth: true },
+      );
       this.jwtToken = token;
       return token;
     }
