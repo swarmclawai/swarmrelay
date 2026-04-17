@@ -48,35 +48,35 @@ export default function AgentDetailPage() {
               </h1>
               <div className="space-y-3">
                 <div className="p-4 bg-[#111] border border-[#333]">
-                  <div className="text-xs text-[#555] mb-1">// Status</div>
+                  <div className="text-xs text-[#555] mb-1">{'// Status'}</div>
                   <div className="text-sm text-[#E0E0E0]">{agent.status}</div>
                 </div>
                 <div className="p-4 bg-[#111] border border-[#333]">
-                  <div className="text-xs text-[#555] mb-1">// Public Key</div>
+                  <div className="text-xs text-[#555] mb-1">{'// Public Key'}</div>
                   <div className="text-sm font-mono break-all text-[#00FF88]">{agent.publicKey}</div>
                 </div>
                 <div className="p-4 bg-[#111] border border-[#333]">
-                  <div className="text-xs text-[#555] mb-1">// Agent ID</div>
+                  <div className="text-xs text-[#555] mb-1">{'// Agent ID'}</div>
                   <div className="text-sm font-mono text-[#888]">{agent.id}</div>
                 </div>
                 {agent.description && (
                   <div className="p-4 bg-[#111] border border-[#333]">
-                    <div className="text-xs text-[#555] mb-1">// Description</div>
+                    <div className="text-xs text-[#555] mb-1">{'// Description'}</div>
                     <div className="text-sm text-[#E0E0E0]">{agent.description}</div>
                   </div>
                 )}
                 {agent.webhookUrl && (
                   <div className="p-4 bg-[#111] border border-[#333]">
-                    <div className="text-xs text-[#555] mb-1">// Webhook URL</div>
+                    <div className="text-xs text-[#555] mb-1">{'// Webhook URL'}</div>
                     <div className="text-sm font-mono text-[#888]">{agent.webhookUrl}</div>
                   </div>
                 )}
                 <div className="p-4 bg-[#111] border border-[#333]">
-                  <div className="text-xs text-[#555] mb-1">// Last Seen</div>
+                  <div className="text-xs text-[#555] mb-1">{'// Last Seen'}</div>
                   <div className="text-sm text-[#E0E0E0]">{agent.lastSeenAt ? new Date(agent.lastSeenAt).toLocaleString() : 'Never'}</div>
                 </div>
                 <div className="p-4 bg-[#111] border border-[#333]">
-                  <div className="text-xs text-[#555] mb-1">// Created</div>
+                  <div className="text-xs text-[#555] mb-1">{'// Created'}</div>
                   <div className="text-sm text-[#E0E0E0]">{new Date(agent.createdAt).toLocaleString()}</div>
                 </div>
               </div>

@@ -22,10 +22,9 @@ export default function ApiKeysPage() {
   const [keys, setKeys] = useState<ApiKeyInfo[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadKeys = async () => {
-    if (!token) return;
+  const loadKeys = async (activeToken: string) => {
     try {
-      const res = await apiFetch<{ data: ApiKeyInfo[] }>('/api/v1/api-keys', token);
+      const res = await apiFetch<{ data: ApiKeyInfo[] }>('/api/v1/api-keys', activeToken);
       setKeys(res.data);
     } catch (err) {
       console.error(err);
@@ -34,13 +33,25 @@ export default function ApiKeysPage() {
     }
   };
 
-  useEffect(() => { loadKeys(); }, [token]);
+  useEffect(() => {
+    if (!token) return;
+    void (async () => {
+      try {
+        const res = await apiFetch<{ data: ApiKeyInfo[] }>('/api/v1/api-keys', token);
+        setKeys(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [token]);
 
   const handleRevoke = async (id: string) => {
     if (!token) return;
     try {
       await apiFetch(`/api/v1/api-keys/${id}`, token, { method: 'DELETE' });
-      loadKeys();
+      void loadKeys(token);
     } catch (err) {
       console.error(err);
     }

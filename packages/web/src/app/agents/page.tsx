@@ -23,10 +23,9 @@ export default function AgentsPage() {
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
 
-  const loadAgents = async () => {
-    if (!token) return;
+  const loadAgents = async (activeToken: string) => {
     try {
-      const res = await apiFetch<{ data: Agent[] }>('/api/v1/agents', token);
+      const res = await apiFetch<{ data: Agent[] }>('/api/v1/agents', activeToken);
       setAgents(res.data);
     } catch (err) {
       console.error(err);
@@ -35,7 +34,19 @@ export default function AgentsPage() {
     }
   };
 
-  useEffect(() => { loadAgents(); }, [token]);
+  useEffect(() => {
+    if (!token) return;
+    void (async () => {
+      try {
+        const res = await apiFetch<{ data: Agent[] }>('/api/v1/agents', token);
+        setAgents(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [token]);
 
   const handleCreate = async () => {
     if (!token || !newName.trim()) return;
@@ -46,7 +57,7 @@ export default function AgentsPage() {
         body: JSON.stringify({ name: newName.trim() }),
       });
       setNewName('');
-      loadAgents();
+      void loadAgents(token);
     } catch (err) {
       console.error(err);
     } finally {

@@ -17,11 +17,11 @@ export default function SettingsPage() {
           </h1>
           <div className="space-y-3">
             <div className="p-4 bg-[#111] border border-[#333]">
-              <div className="text-xs text-[#555] mb-1">// Email</div>
+              <div className="text-xs text-[#555] mb-1">{'// Email'}</div>
               <div className="text-sm text-[#E0E0E0]">{user?.email ?? 'Not set'}</div>
             </div>
             <div className="p-4 bg-[#111] border border-[#333]">
-              <div className="text-xs text-[#555] mb-1">// Display Name</div>
+              <div className="text-xs text-[#555] mb-1">{'// Display Name'}</div>
               <div className="text-sm text-[#E0E0E0]">{user?.displayName ?? 'Not set'}</div>
             </div>
             <Link
