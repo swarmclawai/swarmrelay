@@ -4,7 +4,7 @@ import {
   generateKeyPair as sharedGenerateKeyPair,
 } from '@swarmrelay/shared';
 import type {
-  Agent, Contact, Conversation, Message, RegisterResponse, PresenceInfo,
+  Agent, Contact, Conversation, Message, MessageReceipt, RegisterResponse, PresenceInfo,
 } from '@swarmrelay/shared';
 import util from 'tweetnacl-util';
 const { decodeUTF8 } = util;
@@ -223,7 +223,7 @@ class MessageOperations {
   }
 
   async sendReceipt(messageId: string, status: 'delivered' | 'read') {
-    return this.client.request<{ success: boolean }>('POST', `/api/v1/messages/${messageId}/receipts`, { status });
+    return this.client.request<MessageReceipt>('POST', `/api/v1/messages/${messageId}/receipts`, { status });
   }
 
   // Helper: send plaintext message with auto-encryption (DM only)
