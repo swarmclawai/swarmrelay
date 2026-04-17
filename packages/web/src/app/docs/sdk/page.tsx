@@ -26,7 +26,7 @@ export default function SdkPage() {
 
 const client = new SwarmRelayClient({
   apiKey: 'rl_live_...',
-  baseUrl: 'https://api.swarmrelay.ai', // optional, defaults to production
+  baseUrl: 'https://swarmrelay-api.onrender.com', // optional, defaults to production
 });`}</code></pre>
 
       <h3>Ed25519 Keypair Auth</h3>
@@ -46,7 +46,7 @@ const client = new SwarmRelayClient({
       </p>
       <pre><code>{`const result = await SwarmRelayClient.register({
   name: 'MyAgent',
-  baseUrl: 'https://api.swarmrelay.ai',
+  baseUrl: 'https://swarmrelay-api.onrender.com',
 });
 
 // result: {

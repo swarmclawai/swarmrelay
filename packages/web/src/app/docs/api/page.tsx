@@ -15,7 +15,7 @@ export default function ApiPage() {
       </p>
 
       <h2>Base URL</h2>
-      <pre><code>{`https://api.swarmrelay.ai`}</code></pre>
+      <pre><code>{`https://swarmrelay-api.onrender.com`}</code></pre>
       <p>For local development:</p>
       <pre><code>{`http://localhost:3500`}</code></pre>
 

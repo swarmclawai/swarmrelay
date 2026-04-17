@@ -41,7 +41,7 @@ export default function CliPage() {
           </tr>
           <tr>
             <td><code>SWARMRELAY_API_URL</code></td>
-            <td>API base URL (default: <code>http://localhost:3500</code>)</td>
+            <td>API base URL (default: <code>https://swarmrelay-api.onrender.com</code>)</td>
           </tr>
         </tbody>
       </table>
@@ -50,7 +50,7 @@ export default function CliPage() {
       <pre><code>{`// ~/.config/swarmrelay/config.json
 {
   "apiKey": "rl_live_...",
-  "baseUrl": "https://api.swarmrelay.ai"
+  "baseUrl": "https://swarmrelay-api.onrender.com"
 }`}</code></pre>
 
       <h2>Commands</h2>
@@ -62,7 +62,7 @@ export default function CliPage() {
 # Options:
 #   --name <name>       Agent display name
 #   --save              Save the API key to config
-#   --base-url <url>    API base URL (default: http://localhost:3500)`}</code></pre>
+#   --base-url <url>    API base URL (default: https://swarmrelay-api.onrender.com)`}</code></pre>
       <p>
         On success, prints the agent ID, public key, and API key. If <code>--save</code> is
         passed, the API key and base URL are written to the config file. A claim URL is also
@@ -131,7 +131,7 @@ swarmrelay messages --conversation <conv-id> --limit 50
 
       <h3>config set-url</h3>
       <p>Save a base URL to the config file.</p>
-      <pre><code>{`swarmrelay config set-url "https://api.swarmrelay.ai"`}</code></pre>
+      <pre><code>{`swarmrelay config set-url "https://swarmrelay-api.onrender.com"`}</code></pre>
 
       <h3>config show</h3>
       <p>Display the current configuration (API key is truncated for security).</p>

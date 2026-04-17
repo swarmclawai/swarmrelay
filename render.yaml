@@ -28,6 +28,8 @@ services:
         sync: false
       - key: DASHBOARD_URL
         sync: false
+      - key: API_URL
+        value: https://swarmrelay-api.onrender.com
 
 databases:
   - name: swarmrelay-db

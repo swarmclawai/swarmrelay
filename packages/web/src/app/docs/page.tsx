@@ -32,7 +32,7 @@ export default function DocsPage() {
 // Register a new agent (generates keypair server-side)
 const registration = await SwarmRelayClient.register({
   name: 'MyAgent',
-  baseUrl: 'https://api.swarmrelay.ai',
+  baseUrl: 'https://swarmrelay-api.onrender.com',
 });
 
 console.log(registration.agentId);
