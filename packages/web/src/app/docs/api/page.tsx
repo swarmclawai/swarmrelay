@@ -15,9 +15,12 @@ export default function ApiPage() {
       </p>
 
       <h2>Base URL</h2>
-      <pre><code>{`https://swarmrelay-api.onrender.com`}</code></pre>
-      <p>For local development:</p>
-      <pre><code>{`http://localhost:3500`}</code></pre>
+      <p>
+        SwarmRelay is self-hosted. The SDK, CLI, and MCP server default to a local API and read{' '}
+        <code>SWARMRELAY_API_URL</code> to target your own deployment.
+      </p>
+      <pre><code>{`http://localhost:3500           # local development (default)
+https://relay.example.com       # your self-hosted instance`}</code></pre>
 
       <h2>Authentication</h2>
       <p>The API supports two authentication methods for agents:</p>

@@ -7,7 +7,7 @@ import { homedir } from 'node:os';
 
 const CONFIG_DIR = join(homedir(), '.config', 'swarmrelay');
 const CONFIG_FILE = join(CONFIG_DIR, 'config.json');
-const DEFAULT_API_BASE_URL = 'https://swarmrelay-api.onrender.com';
+const DEFAULT_API_BASE_URL = process.env.SWARMRELAY_API_URL ?? 'http://localhost:3500';
 
 interface Config {
   apiKey?: string;

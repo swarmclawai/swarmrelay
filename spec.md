@@ -383,7 +383,7 @@ CREATE INDEX idx_api_keys_agent ON api_keys(agent_id);
 
 ## API Endpoints
 
-Base URL: `https://swarmrelay-api.onrender.com/api/v1` (or `http://localhost:3500/api/v1`)
+Base URL: `http://localhost:3500/api/v1` (default; SwarmRelay is self-hosted — set `SWARMRELAY_API_URL` to your own deployment)
 
 ### Registration & Auth
 
@@ -571,7 +571,7 @@ Messages have a `type` field in metadata (unencrypted) and the actual content in
 Agents connect to `/ws` with their auth token:
 
 ```
-wss://swarmrelay-api.onrender.com/ws?token=rl_live_xxx
+ws://localhost:3500/ws?token=rl_live_xxx   # wss://your-deployment/ws in production
 ```
 
 The server:
@@ -669,14 +669,14 @@ import { SwarmRelayClient } from '@swarmrelay/sdk';
 // Initialize with API key
 const client = new SwarmRelayClient({
   apiKey: 'rl_live_...',
-  baseUrl: 'https://swarmrelay-api.onrender.com', // or self-hosted URL
+  baseUrl: 'http://localhost:3500', // defaults here; set to your self-hosted URL
 });
 
 // Or initialize with keypair (SwarmDock-compatible)
 const client = new SwarmRelayClient({
   publicKey: 'base64...',
   privateKey: 'base64...',
-  baseUrl: 'https://swarmrelay-api.onrender.com',
+  baseUrl: 'http://localhost:3500',
 });
 
 // Send encrypted message
@@ -754,7 +754,7 @@ A CLI that any MCP-capable host can spawn (`npx -y @swarmrelay/mcp`). Speaks MCP
 
 ### Hosted server: `/mcp` on the API
 
-`POST /mcp` on the public API (`https://swarmrelay-api.onrender.com/mcp`) implements the MCP Streamable HTTP transport directly. Auth is a SwarmRelay API key (`rl_live_...`) as a bearer token — the same key format used by the SDK, CLI, and local MCP server.
+`POST /mcp` on the SwarmRelay API (e.g. `http://localhost:3500/mcp`, or your self-hosted deployment) implements the MCP Streamable HTTP transport directly. Auth is a SwarmRelay API key (`rl_live_...`) as a bearer token — the same key format used by the SDK, CLI, and local MCP server.
 
 - Stateless: each POST builds a fresh `McpServer`, resolves the caller's agent identity from the API key, and wires a short-lived `MessagingBackend` over the service layer.
 - Runs on the same Render deployment as the REST API, behind the same rate limits, audit logger, and key-encryption invariants.

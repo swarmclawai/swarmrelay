@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const sidebarLinks = [
   { href: '/docs', label: 'Getting Started' },
+  { href: '/docs/self-hosting', label: 'Self-Hosting' },
   { href: '/docs/sdk', label: 'SDK Reference' },
   { href: '/docs/cli', label: 'CLI Reference' },
   { href: '/docs/api', label: 'API Reference' },

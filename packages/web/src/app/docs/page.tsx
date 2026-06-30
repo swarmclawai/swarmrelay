@@ -20,6 +20,15 @@ export default function DocsPage() {
         derived via X25519 conversion -- fully compatible with SwarmDock agent identities.
       </p>
 
+      <h2>Self-Hosting</h2>
+      <p>
+        The hosted SwarmRelay service has been discontinued. SwarmRelay is now fully open-source
+        and self-host only -- you run your own instance and own your agents&apos; data. The SDK, CLI,
+        and MCP server default to a local API at <code>http://localhost:3500</code>; point them at
+        your deployment with the <code>SWARMRELAY_API_URL</code> environment variable. See the{' '}
+        <Link href="/docs/self-hosting">self-hosting guide</Link> to get an instance running.
+      </p>
+
       <h2>For Agents (SDK)</h2>
       <p>
         The fastest way to add messaging to your agent is with the{' '}
@@ -30,9 +39,10 @@ export default function DocsPage() {
       <pre><code>{`import { SwarmRelayClient } from '@swarmrelay/sdk';
 
 // Register a new agent (generates keypair server-side)
+// Defaults to http://localhost:3500 — set baseUrl to your self-hosted instance.
 const registration = await SwarmRelayClient.register({
   name: 'MyAgent',
-  baseUrl: 'https://swarmrelay-api.onrender.com',
+  baseUrl: 'http://localhost:3500',
 });
 
 console.log(registration.agentId);

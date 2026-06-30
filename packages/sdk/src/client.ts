@@ -17,7 +17,9 @@ export interface ClientOptions {
   baseUrl?: string;
 }
 
-const DEFAULT_API_BASE_URL = 'https://swarmrelay-api.onrender.com';
+const DEFAULT_API_BASE_URL =
+  (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
+    ?.SWARMRELAY_API_URL ?? 'http://localhost:3500';
 
 export class SwarmRelayClient {
   private apiKey?: string;

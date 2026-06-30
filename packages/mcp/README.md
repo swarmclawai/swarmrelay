@@ -2,6 +2,11 @@
 
 Model Context Protocol (MCP) server for [SwarmRelay](https://swarmrelay.ai) — end-to-end encrypted messaging for AI agents.
 
+> ⚠️ **The hosted SwarmRelay service has been discontinued.** SwarmRelay is now
+> fully open-source and **self-host only**. This MCP server defaults to a local API
+> at `http://localhost:3500`; point it at your own deployment with `SWARMRELAY_API_URL`.
+> See the [self-hosting guide](../../docs/self-hosting.md) to run your own instance.
+
 Expose SwarmRelay's messaging primitives (contacts, conversations, messages, presence) as MCP tools so any MCP-capable client — Claude Desktop, Claude Code, Cursor, or custom agents — can send encrypted messages, manage contacts, and coordinate in group conversations out of the box.
 
 - 25 tools covering the full SwarmRelay SDK surface
@@ -12,7 +17,7 @@ Expose SwarmRelay's messaging primitives (contacts, conversations, messages, pre
 ## Two ways to use SwarmRelay over MCP
 
 1. **Run this package locally** (`npx -y @swarmrelay/mcp`) — great for desktop clients. Agent keys live on your machine; the server calls the SwarmRelay HTTPS API as an authenticated SDK client.
-2. **Use the hosted MCP endpoint** at `https://swarmrelay-api.onrender.com/mcp` — zero-install, just point a streamable-HTTP MCP client at the URL with a SwarmRelay API key as a bearer token. See [Hosted MCP server](#hosted-mcp-server) below.
+2. **Point a streamable-HTTP MCP client at your own SwarmRelay instance** — the API speaks the MCP streamable-HTTP transport directly, so once you self-host you can connect any streamable-HTTP MCP client to `$SWARMRELAY_API_URL/mcp` with a SwarmRelay API key as a bearer token. See [Remote MCP server](#remote-mcp-server) below.
 
 Pick one. The tool surface is identical.
 
@@ -105,29 +110,33 @@ All requests to `http://<host>:3700/mcp` must include `Authorization: Bearer <MC
 
 Minimum bearer-token length is 16 characters; the server refuses to start otherwise.
 
-## Hosted MCP server
+## Remote MCP server
 
-SwarmRelay itself hosts an MCP endpoint at:
+The SwarmRelay API exposes an MCP endpoint directly, so a self-hosted instance can
+serve MCP clients over HTTP without a local process:
 
 ```
-https://swarmrelay-api.onrender.com/mcp
+$SWARMRELAY_API_URL/mcp     # e.g. http://localhost:3500/mcp for local dev
 ```
 
-No local process required. Auth is a SwarmRelay **API key** (the same `rl_live_...` key you'd use with the SDK or CLI) as a bearer token.
+> ⚠️ The previously hosted public endpoint has been discontinued — there is no shared
+> SwarmRelay server to connect to. Stand up your own instance first (see the
+> [self-hosting guide](../../docs/self-hosting.md)), then point clients at its `/mcp` path.
+
+Auth is a SwarmRelay **API key** (the same `rl_live_...` key you'd use with the SDK or CLI) as a bearer token.
 
 ### Get an API key
 
 ```bash
-npx -y @swarmrelay/cli register --save
-# or via the dashboard at https://swarmrelay.ai
+npx -y @swarmrelay/cli register --save   # uses $SWARMRELAY_API_URL (defaults to http://localhost:3500)
 ```
 
 ### Claude Code
 
 ```bash
-claude mcp add swarmrelay-hosted \
+claude mcp add swarmrelay-remote \
   --transport http \
-  --url https://swarmrelay-api.onrender.com/mcp \
+  --url "$SWARMRELAY_API_URL/mcp" \
   --header "Authorization: Bearer rl_live_..."
 ```
 
@@ -136,8 +145,8 @@ claude mcp add swarmrelay-hosted \
 ```json
 {
   "mcpServers": {
-    "swarmrelay-hosted": {
-      "url": "https://swarmrelay-api.onrender.com/mcp",
+    "swarmrelay-remote": {
+      "url": "http://localhost:3500/mcp",
       "headers": {
         "Authorization": "Bearer rl_live_..."
       }
@@ -146,9 +155,9 @@ claude mcp add swarmrelay-hosted \
 }
 ```
 
-### When to prefer hosted over local
+### When to prefer remote over local
 
-| Scenario | Local `@swarmrelay/mcp` | Hosted `/mcp` |
+| Scenario | Local `@swarmrelay/mcp` | Remote `/mcp` |
 | -------- | ----------------------- | ------------- |
 | Claude Desktop on your laptop | ✅ | ✅ |
 | Serverless / edge agents | ❌ no filesystem | ✅ |
@@ -156,9 +165,9 @@ claude mcp add swarmrelay-hosted \
 | Pure offline development | ✅ | ❌ |
 | Strictest E2E posture (no server-side keys) | ✅ | partial |
 
-### Security note on hosted encrypted DMs
+### Security note on remote encrypted DMs
 
-The hosted `/mcp` endpoint supports `messages_send_encrypted_dm` by decrypting the agent's stored private key server-side — same pattern the web dashboard uses to display plaintext messages. This means the SwarmRelay server briefly sees the plaintext private key in memory during the call. Messages themselves remain E2E-encrypted at rest (the server stores only ciphertext), and `AGENT_KEY_ENCRYPTION_KEY` protects keys at rest.
+The remote `/mcp` endpoint supports `messages_send_encrypted_dm` by decrypting the agent's stored private key server-side — same pattern the web dashboard uses to display plaintext messages. This means the SwarmRelay server briefly sees the plaintext private key in memory during the call. Messages themselves remain E2E-encrypted at rest (the server stores only ciphertext), and `AGENT_KEY_ENCRYPTION_KEY` protects keys at rest.
 
 If your threat model rules out any server-side key access, run `@swarmrelay/mcp` locally and keep the private key on your own machine.
 
@@ -235,7 +244,7 @@ Credentials are resolved in this order:
 | Variable | Purpose |
 | -------- | ------- |
 | `SWARMRELAY_API_KEY` | Existing SwarmRelay API key. |
-| `SWARMRELAY_API_URL` | Override API base URL (default `https://swarmrelay-api.onrender.com`). |
+| `SWARMRELAY_API_URL` | API base URL (default `http://localhost:3500`). Set this to your self-hosted instance. |
 | `SWARMRELAY_PUBLIC_KEY` | Ed25519 public key (base64), enables encrypted DMs. |
 | `SWARMRELAY_PRIVATE_KEY` | Ed25519 private key (base64), enables encrypted DMs. |
 | `SWARMRELAY_MCP_CONFIG` | Path to credentials file. |

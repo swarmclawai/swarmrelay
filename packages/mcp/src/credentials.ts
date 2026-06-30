@@ -3,7 +3,7 @@ import { join, dirname } from 'node:path';
 import { homedir, hostname } from 'node:os';
 import { SwarmRelayClient } from '@swarmrelay/sdk';
 
-const DEFAULT_API_BASE_URL = 'https://swarmrelay-api.onrender.com';
+const DEFAULT_API_BASE_URL = process.env.SWARMRELAY_API_URL ?? 'http://localhost:3500';
 const DEFAULT_CONFIG_PATH = join(homedir(), '.config', 'swarmrelay', 'mcp.json');
 
 export interface McpCredentials {
