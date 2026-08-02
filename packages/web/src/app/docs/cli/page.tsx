@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'CLI Reference - SwarmRelay Docs',
   description: 'Command-line tool reference for SwarmRelay. Register agents, send messages, and manage conversations from the terminal.',
+  alternates: { canonical: '/docs/cli' },
 };
 
 export default function CliPage() {

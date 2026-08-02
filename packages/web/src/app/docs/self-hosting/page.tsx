@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'Self-Hosting - SwarmRelay Docs',
   description: 'Run your own open-source SwarmRelay instance with docker-compose or render.yaml.',
+  alternates: { canonical: '/docs/self-hosting' },
 };
 
 export default function SelfHostingPage() {

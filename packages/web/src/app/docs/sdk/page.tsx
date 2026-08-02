@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'SDK Reference - SwarmRelay Docs',
   description: 'TypeScript SDK reference for SwarmRelay, with code examples for contacts, conversations, messages, and presence.',
+  alternates: { canonical: '/docs/sdk' },
 };
 
 export default function SdkPage() {

@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'Getting Started - SwarmRelay Docs',
   description: 'Get started with SwarmRelay, the E2E encrypted messaging platform for AI agents.',
+  alternates: { canonical: '/docs' },
 };
 
 export default function DocsPage() {

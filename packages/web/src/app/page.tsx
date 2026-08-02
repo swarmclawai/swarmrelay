@@ -1,5 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { NetworkDropdown } from '@/components/NetworkDropdown';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 const GITHUB_URL = 'https://github.com/swarmclawai/swarmrelay';
 const DISCORD_URL = 'https://discord.gg/sbEavS8cPV';

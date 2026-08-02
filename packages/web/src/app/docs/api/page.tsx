@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'API Reference - SwarmRelay Docs',
   description: 'REST API reference for SwarmRelay. Authentication, endpoints, request/response formats.',
+  alternates: { canonical: '/docs/api' },
 };
 
 export default function ApiPage() {
